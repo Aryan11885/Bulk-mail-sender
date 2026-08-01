@@ -27,9 +27,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (account) {
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
-
-        // Store the Google ID token as well
         token.idToken = account.id_token;
+
+        token.accessTokenExpires = account.expires_at
+          ? account.expires_at * 1000
+          : Date.now() + 3600 * 1000;
+      }
+
+      if (token.accessTokenExpires && Date.now() > token.accessTokenExpires) {
+        token.error = "AccessTokenExpired";
       }
 
       return token;
@@ -37,6 +43,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
     async session({ session, token }) {
       session.accessToken = token.accessToken as string | undefined;
+      session.error = token.error as string | undefined;
 
       return session;
     },
