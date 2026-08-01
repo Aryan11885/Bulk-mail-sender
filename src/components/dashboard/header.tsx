@@ -7,58 +7,54 @@ export default function Header() {
   const { data: session } = useSession();
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        {/* Left */}
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600">
-            <Mail className="h-5 w-5 text-white" />
+          <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-indigo-600 shrink-0">
+            <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
 
           <div>
-            <h1 className="text-lg font-bold text-gray-900">
-              Bulk Mail Sender
+            <h1 className="text-base sm:text-lg font-bold text-white tracking-tight">
+              MailBlast OS
             </h1>
-
-            <p className="text-xs text-gray-500">
-              Send personalized emails using Gmail
+            <p className="text-xs text-slate-400 hidden sm:block">
+              Send personalized emails at scale
             </p>
           </div>
         </div>
 
-        {/* Right */}
         {session ? (
-          <div className="flex items-center gap-4">
-            {session.user?.image && (
-              <img
-                src={session.user.image}
-                alt={session.user.name ?? "Profile"}
-                className="h-10 w-10 rounded-full border"
-              />
-            )}
-
-            <div className="text-right">
-              <p className="font-medium text-gray-900">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden sm:block text-right">
+              <p className="text-sm font-medium text-white leading-tight">
                 {session.user?.name}
               </p>
-
-              <p className="text-sm text-gray-500">
+              <p className="text-xs text-slate-400 truncate max-w-[180px]">
                 {session.user?.email}
               </p>
             </div>
 
+            {session.user?.image && (
+              <img
+                src={session.user.image}
+                alt={session.user.name ?? "Profile"}
+                className="h-8 w-8 sm:h-9 sm:w-9 rounded-full border border-white/10 shrink-0"
+              />
+            )}
+
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="flex items-center gap-2 rounded-lg bg-red-500 px-4 py-2 text-white transition hover:bg-red-600"
+              className="flex items-center gap-1.5 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs sm:text-sm font-medium text-red-300 transition-colors hover:bg-red-500/20 hover:text-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             >
-              <LogOut className="h-4 w-4" />
-              Logout
+              <LogOut className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Sign out</span>
             </button>
           </div>
         ) : (
           <button
             onClick={() => signIn("google")}
-            className="rounded-lg bg-indigo-600 px-5 py-2 font-medium text-white transition hover:bg-indigo-700"
+            className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
           >
             Continue with Google
           </button>

@@ -1,5 +1,7 @@
 "use client";
 
+import { CheckCircle2, XCircle, Send, Loader2 } from "lucide-react";
+
 interface Result {
   name: string;
   email: string;
@@ -27,119 +29,120 @@ export default function ProgressDialog({
 }: ProgressDialogProps) {
   if (!open) return null;
 
-  const percentage =
-    total === 0 ? 0 : Math.round((progress / total) * 100);
-
+  const percentage = total === 0 ? 0 : Math.round((progress / total) * 100);
   const sent = results.filter((r) => r.status === "success").length;
   const failed = results.filter((r) => r.status === "failed").length;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="max-h-[85vh] w-[650px] overflow-auto rounded-2xl bg-white p-6 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
+      <div className="max-h-[85vh] w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-2xl flex flex-col">
 
         {!completed ? (
-          <>
-            <h2 className="mb-6 text-2xl font-bold">
-              📤 Sending Emails...
-            </h2>
+          <div className="p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/15 shrink-0">
+                <Loader2 className="h-4 w-4 text-indigo-400 animate-spin" />
+              </div>
+              <div>
+                <h2 className="text-sm font-semibold text-white">Sending campaign...</h2>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {progress} of {total} emails sent
+                </p>
+              </div>
+            </div>
 
-            <div className="mb-4 h-3 overflow-hidden rounded-full bg-gray-200">
+            <div className="mb-2 h-2 w-full overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full rounded-full bg-indigo-600 transition-all duration-300"
-                style={{
-                  width: `${percentage}%`,
-                }}
+                className="h-full rounded-full bg-indigo-500 transition-all duration-300"
+                style={{ width: `${percentage}%` }}
               />
             </div>
 
-            <div className="flex justify-between text-sm text-gray-600">
+            <div className="flex justify-between text-xs text-slate-500 mb-6">
               <span>{progress} / {total}</span>
               <span>{percentage}%</span>
             </div>
 
-            <div className="mt-6 rounded-lg border bg-gray-50 p-4">
-              <p className="text-sm text-gray-500">
-                Currently Sending
-              </p>
-
-              <p className="mt-1 font-semibold break-all">
+            <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+              <p className="text-xs text-slate-500 mb-1">Currently sending to</p>
+              <p className="text-sm font-medium text-white break-all">
                 {currentEmail || "Preparing..."}
               </p>
             </div>
 
-            <p className="mt-6 text-center text-sm text-gray-400">
-              Please don't close this window while emails are being sent.
+            <p className="mt-4 text-center text-xs text-slate-500">
+              Keep this window open while your campaign is sending
             </p>
-          </>
+          </div>
         ) : (
           <>
-            <h2 className="mb-6 text-2xl font-bold text-green-600">
-              🎉 Bulk Email Completed
-            </h2>
-
-            <div className="mb-6 grid grid-cols-3 gap-4">
-              <div className="rounded-xl bg-gray-100 p-4 text-center">
-                <p className="text-sm text-gray-500">Total</p>
-                <p className="text-3xl font-bold">{total}</p>
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 shrink-0">
+                  <Send className="h-4 w-4 text-emerald-400" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-semibold text-white">Campaign complete</h2>
+                  <p className="text-xs text-slate-400 mt-0.5">Here's a summary of your send</p>
+                </div>
               </div>
 
-              <div className="rounded-xl bg-green-100 p-4 text-center">
-                <p className="text-sm text-green-700">Sent</p>
-                <p className="text-3xl font-bold text-green-700">
-                  {sent}
-                </p>
-              </div>
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="rounded-xl border border-white/10 bg-white/5 p-3 text-center">
+                  <p className="text-xs text-slate-500 mb-1">Total</p>
+                  <p className="text-2xl font-bold text-white">{total}</p>
+                </div>
 
-              <div className="rounded-xl bg-red-100 p-4 text-center">
-                <p className="text-sm text-red-700">Failed</p>
-                <p className="text-3xl font-bold text-red-700">
-                  {failed}
-                </p>
+                <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-center">
+                  <p className="text-xs text-emerald-500 mb-1">Sent</p>
+                  <p className="text-2xl font-bold text-emerald-400">{sent}</p>
+                </div>
+
+                <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-center">
+                  <p className="text-xs text-red-500 mb-1">Failed</p>
+                  <p className="text-2xl font-bold text-red-400">{failed}</p>
+                </div>
               </div>
             </div>
 
-            <div className="max-h-[320px] space-y-3 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto px-6 pb-2 space-y-2 min-h-0">
               {results.map((result) => (
                 <div
                   key={result.email}
-                  className="flex items-center justify-between rounded-xl border p-4"
+                  className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 gap-3"
                 >
-                  <div>
-                    <p className="font-semibold">
-                      {result.name}
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-white truncate">
+                      {result.name || "—"}
                     </p>
-
-                    <p className="text-sm text-gray-500">
-                      {result.email}
-                    </p>
+                    <p className="text-xs text-slate-400 truncate">{result.email}</p>
                   </div>
 
-                  <span
-                    className={`rounded-full px-4 py-1 text-sm font-medium ${
-                      result.status === "success"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {result.status === "success"
-                      ? "✅ Sent"
-                      : "❌ Failed"}
-                  </span>
+                  {result.status === "success" ? (
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-400 shrink-0">
+                      <CheckCircle2 className="h-3 w-3" />
+                      Sent
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-red-500/20 bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-400 shrink-0">
+                      <XCircle className="h-3 w-3" />
+                      Failed
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 flex justify-end">
+            <div className="p-6 border-t border-white/10">
               <button
                 onClick={onClose}
-                className="rounded-lg bg-indigo-600 px-5 py-2 text-white transition hover:bg-indigo-700"
+                className="w-full rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
               >
                 Close
               </button>
             </div>
           </>
         )}
-
       </div>
     </div>
   );
