@@ -13,13 +13,13 @@ export async function POST(request: Request) {
       );
     }
 
-    const body = await request.json();
+    const { to, subject, html } = await request.json();
 
     await sendEmail(
       session.accessToken,
-      body.to,
-      body.subject,
-      body.html
+      to,
+      subject,
+      html
     );
 
     return NextResponse.json({

@@ -2,7 +2,6 @@
 
 import RichTextEditor from "./rich-text-editor";
 import { useEmailStore } from "@/store/email-store";
-import SendTestButton from "./send-test-button";
 import SendAllButton from "./send-all-button";
 
 export default function EmailForm() {
@@ -29,8 +28,7 @@ export default function EmailForm() {
           <label className="mb-2 block text-sm font-medium">Email Body</label>
 
           <RichTextEditor />
-          <div className="mt-6 flex justify-end gap-3">
-            <SendTestButton />
+          <div className="mt-6 flex justify-end">
             <SendAllButton />
           </div>
         </div>
