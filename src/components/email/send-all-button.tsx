@@ -130,7 +130,7 @@ export default function SendAllButton() {
         ) : (
           <>
             <Send className="h-4 w-4" />
-            Send campaign
+            Send to All
           </>
         )}
       </button>
