@@ -6,6 +6,7 @@ import SignInButton from "@/components/auth/sign-in-button";
 import Header from "@/components/dashboard/header";
 import EmailForm from "@/components/email/email-form";
 import RecipientTable from "@/components/recipient/recipient-table";
+import EmailPreview from "@/components/email/email-preview";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -26,6 +27,10 @@ export default function Home() {
         <div className="grid gap-6 lg:grid-cols-2">
           <EmailForm />
           <RecipientTable />
+        </div>
+
+        <div className="mt-6">
+          <EmailPreview />
         </div>
       </div>
     </main>

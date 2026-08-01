@@ -4,21 +4,18 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
+import { useEmailStore } from "@/store/email-store";
 
 export default function RichTextEditor() {
+  const { body, setBody } = useEmailStore();
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link,
-    ],
-    content: `
-      <p>Dear {{name}},</p>
+    extensions: [StarterKit, Underline, Link],
 
-      <p>Welcome to Creyotech 🚀</p>
+    content: body,
 
-      <p>Regards,<br/>HR Team</p>
-    `,
+    onUpdate({ editor }) {
+      setBody(editor.getHTML());
+    },
   });
 
   if (!editor) return null;
@@ -49,18 +46,14 @@ export default function RichTextEditor() {
         </button>
 
         <button
-          onClick={() =>
-            editor.chain().focus().toggleBulletList().run()
-          }
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
           className="rounded border px-3 py-1"
         >
           • List
         </button>
 
         <button
-          onClick={() =>
-            editor.chain().focus().toggleOrderedList().run()
-          }
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className="rounded border px-3 py-1"
         >
           1. List
@@ -68,10 +61,7 @@ export default function RichTextEditor() {
       </div>
 
       {/* Editor */}
-      <EditorContent
-        editor={editor}
-        className="min-h-[300px] p-4"
-      />
+      <EditorContent editor={editor} className="min-h-[300px] p-4" />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import AuthSessionProvider from "@/components/auth/session-provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Bulk Mail Sender",
@@ -17,6 +18,8 @@ export default function RootLayout({
       <body>
         <AuthSessionProvider>
           {children}
+
+          <Toaster richColors position="top-center" />
         </AuthSessionProvider>
       </body>
     </html>
