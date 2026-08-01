@@ -3,28 +3,31 @@
 import { useSession } from "next-auth/react";
 import SignInButton from "@/components/auth/sign-in-button";
 
+import Header from "@/components/dashboard/header";
+import EmailForm from "@/components/email/email-form";
+import RecipientTable from "@/components/recipient/recipient-table";
+
 export default function Home() {
   const { data: session } = useSession();
 
-  return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-100">
-      {!session ? (
+  if (!session) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-gray-100">
         <SignInButton />
-      ) : (
-        <div className="rounded-xl bg-white p-8 shadow-lg text-center">
-          <h1 className="text-2xl font-bold">
-            Welcome
-          </h1>
+      </main>
+    );
+  }
 
-          <p className="mt-4">
-            {session.user?.name}
-          </p>
+  return (
+    <main className="min-h-screen bg-gray-100">
+      <Header />
 
-          <p className="text-gray-500">
-            {session.user?.email}
-          </p>
+      <div className="mx-auto max-w-7xl p-6">
+        <div className="grid gap-6 lg:grid-cols-2">
+          <EmailForm />
+          <RecipientTable />
         </div>
-      )}
+      </div>
     </main>
   );
 }
