@@ -12,7 +12,14 @@ type SendResult = {
 };
 
 export default function SendAllButton() {
-  const { subject, body, recipients } = useEmailStore();
+  const {
+    subject,
+    body,
+    recipients,
+    reset,
+    history,
+    addHistory,
+  } = useEmailStore();
 
   const [loading, setLoading] = useState(false);
 
@@ -91,7 +98,6 @@ export default function SendAllButton() {
         }
 
         setResults([...emailResults]);
-
         setProgress(i + 1);
 
         await new Promise((resolve) => setTimeout(resolve, 250));
@@ -99,12 +105,27 @@ export default function SendAllButton() {
 
       setCompleted(true);
 
-      toast.success(
-        `Completed! Sent: ${sent} | Failed: ${failed}`
+      const historyItem = {
+        id: crypto.randomUUID(),
+        subject,
+        sentAt: new Date().toISOString(),
+        sent,
+        failed,
+        recipients,
+      };
+
+      // Update Zustand immediately
+      addHistory(historyItem);
+
+      // Persist to localStorage
+      localStorage.setItem(
+        "bulk-mail-history",
+        JSON.stringify([historyItem, ...history])
       );
+
+      toast.success(`Completed! Sent: ${sent} | Failed: ${failed}`);
     } catch (error) {
       console.error(error);
-
       toast.error("Something went wrong while sending emails.");
     } finally {
       setLoading(false);
@@ -121,6 +142,8 @@ export default function SendAllButton() {
         currentEmail={currentEmail}
         results={results}
         onClose={() => {
+          reset();
+
           setOpen(false);
           setCompleted(false);
           setProgress(0);
